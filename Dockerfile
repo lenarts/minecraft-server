@@ -1,20 +1,18 @@
-# Osnovna slika z Javo
-FROM eclipse-temurin:21-jdk-alpine
+# Uporabi uradno Minecraft strežniško sliko (ali lahko uporabiš tudi openjdk za custom setup)
+FROM openjdk:17-jdk-alpine
 
-# Nastavi delovno mapo
+# Nastavi delovno mapo v containerju
 WORKDIR /minecraft
 
-# Prenesi Minecraft server .jar (posodobi link, če je treba)
-RUN wget -O server.jar https://piston-data.mojang.com/v1/objects/95495a7f485eedd84ce928cef5e223b757d2f764/server.jar
+# Prenesi zadnjo verzijo Minecraft serverja (npr. 1.20.1, spremeni po potrebi)
+RUN wget -O server.jar https://launcher.mojang.com/v1/objects/f27a03d4d8f3f019d9981f2f351e295ab1a9cc05/server.jar
 
-# Ustvari datoteko za potrditev EULA (mora biti "true")
-RUN echo "eula=true" > eula.txt
+# Kopiraj svoje konfiguracijske datoteke v delovno mapo
+COPY server.properties /minecraft/server.properties
+COPY eula.txt /minecraft/eula.txt
 
-# Ustvari server.properties in nastavi port 25565 (privzeti Minecraft port)
-RUN echo "server-port=25565" > server.properties
-
-# Odpri port 25565 (pomaga Dockerju in Renderu vedeti, da bo port odprt)
+# Odpri port 25565 (standardni Minecraft port)
 EXPOSE 25565
 
-# Zaženi Minecraft server brez GUI-ja in z določenimi JVM parametri
+# Zaženi Minecraft strežnik
 CMD ["java", "-Xmx1024M", "-Xms1024M", "-jar", "server.jar", "nogui"]
