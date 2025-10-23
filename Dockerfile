@@ -1,22 +1,16 @@
-# Uporabi uradno Minecraft strežniško sliko (ali lahko uporabiš tudi openjdk za custom setup)
 FROM openjdk:21-jdk
 
-
-# Nastavi delovno mapo v containerju
 WORKDIR /minecraft
 
-# Prenesi zadnjo verzijo Minecraft serverja (npr. 1.20.1, spremeni po potrebi)
+# Namesti wget
+RUN apt-get update && apt-get install -y wget && rm -rf /var/lib/apt/lists/*
+
+# Prenesi zadnjo verzijo Minecraft serverja
 RUN wget -O server.jar https://piston-data.mojang.com/v1/objects/95495a7f485eedd84ce928cef5e223b757d2f764/server.jar
 
-# Kopiraj svoje konfiguracijske datoteke v delovno mapo
 COPY server.properties /minecraft/server.properties
 COPY eula.txt /minecraft/eula.txt
 
-# Odpri port 25565 (standardni Minecraft port)
 EXPOSE 25565
 
-# Zaženi Minecraft strežnik
 CMD ["java", "-Xmx1024M", "-Xms1024M", "-jar", "server.jar", "nogui"]
-
-
-
