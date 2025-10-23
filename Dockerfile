@@ -1,5 +1,6 @@
 # Uporabi uradno Minecraft strežniško sliko (ali lahko uporabiš tudi openjdk za custom setup)
-FROM openjdk:21-jdk-alpine
+FROM openjdk:21-jdk
+
 
 # Nastavi delovno mapo v containerju
 WORKDIR /minecraft
@@ -16,5 +17,6 @@ EXPOSE 25565
 
 # Zaženi Minecraft strežnik
 CMD ["java", "-Xmx1024M", "-Xms1024M", "-jar", "server.jar", "nogui"]
+
 
 
